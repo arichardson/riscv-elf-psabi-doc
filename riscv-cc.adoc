@@ -56,7 +56,7 @@ After the prologue, the frame pointer register will point to the Canonical
 Frame Address or CFA, which is the stack pointer value on entry to the current
 procedure. The previous frame pointer and return address pair will reside just
 prior to the current stack address held in `fp`. This puts the return address
-at `fp - XLEN/8`, and the previous frame pointer at `fp - 2 * XLEN/8`.
+at `fp - sizeof(void *)`, and the previous frame pointer at `fp - 2 * sizeof(void *)`.
 
 It is left to the platform to determine the level of conformance with this
 convention. A platform may choose:
@@ -96,6 +96,14 @@ if targeting the base integer calling convention.
 The Floating-Point Control and Status Register (fcsr) must have thread storage
 duration in accordance with C11 section 7.6 "Floating-point environment
 <fenv.h>".
+
+=== Capability Register Convention
+
+Since the RVY capability registers extend the integer register file, the same conventions and names are used.
+The only difference is that they are `YLEN=2*XLEN` bits wide and must be aligned to `YLEN` bits as well.
+
+IMPORTANT: Capability register usage in the ILP32* and LP64* ABIs is not specified yet, only IL32PC64* and L64PC128* ABIs have a well-defined calling convention for capability registers.
+
 
 === Vector Register Convention
 
@@ -674,6 +682,20 @@ these registers are considered temporaries.
 The ILP32E calling convention is not compatible with ISAs that have registers
 that require load and store alignments of more than 32 bits. In particular, this
 calling convention must not be used with the D ISA extension.
+
+[[cheri-cc]]
+=== RVY Pure-Capability Calling Conventions
+
+IMPORTANT: RVY Pure-Capability ABIs are experimental.
+
+These calling conventions are used when the Y extension is present and a pure-capability ABI is in use.
+In these ABIs, all pointers (including the stack pointer, frame pointer, and return address) are represented as capabilities (using the extended GPRs).
+
+The register names and usage remain the same as the integer calling convention, but the registers `x0`-`x31` (and their ABI aliases) now refer to the `YLEN`-wide extended GPRs.
+Any integer operation (e.g., add/multiply/etc.) writing to the ``x0`-`x31` registers sets the lower XLEN bits and zeroes the upper ones.
+
+The pure-capability ABIs follow the same calling conventions as the base integer and hardware floating-point calling conventions, with the distinction that pointers are replaced by capabilities.
+This means that arguments and return values are passed in the same manner, but any pointer types are instead treated as capabilities.
 
 === RV64ILP32* Calling Convention
 
