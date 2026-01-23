@@ -1273,6 +1273,14 @@ attribute.
 `DT_INIT` and `DT_FINI` are not required to be supported and should be avoided
 in favour of `DT_PREINIT_ARRAY`, `DT_INIT_ARRAY` and `DT_FINI_ARRAY`.
 
+=== Section and Segment Alignment for pure-capability ABIs
+
+Loadable segments in executables and shared objects should be aligned and
+padded to ensure that systems software can generate capabilities for each
+segment that do not overlap with other loadable segments. See <<riscv-cheri-spec,the CHERI Specification>> for
+the specification of the capability compression in use and the alignment
+requirements the format imposes to ensure representable non-overlapping bounds.
+
 === Hash Table
 
 There are no RISC-V specific definitions relating to ELF hash tables.
