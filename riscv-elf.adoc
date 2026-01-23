@@ -355,7 +355,13 @@ below.
 
 NOTE: RV64ILP32* ABIs are experimental.
 
-Until such a time that the *Reserved* bits (0x00ffffe0) are allocated by future
+// NOTE: Previously used the custom value 0x00010000
+[[EF_RISCV_CHERIABI]]
+EF_RISCV_CHERIABI (0x00000040)::: This bit is set when the binary targets the
+pure capability ABIs defined by this specification.
+
+
+Until such a time that the *Reserved* bits (0x00ffff80) are allocated by future
 versions of this specification, they shall not be set by standard software.
 Non-standard extensions are free to use bits 24-31 for any purpose. This may
 conflict with other non-standard extensions.
