@@ -697,6 +697,24 @@ Any integer operation (e.g., add/multiply/etc.) writing to the ``x0`-`x31` regis
 The pure-capability ABIs follow the same calling conventions as the base integer and hardware floating-point calling conventions, with the distinction that pointers are replaced by capabilities.
 This means that arguments and return values are passed in the same manner, but any pointer types are instead treated as capabilities.
 
+=== IL32PC64E Calling Convention
+
+// TODO: confirm final naming of Y+E base ISA with ARC
+The IL32PC64E calling convention is designed to be usable with the RV32YE base ISA.
+This calling convention is the same as the IL32PC64 calling convention,
+except for the following differences.
+The stack pointer need only be aligned to a 64-bit boundary.
+Registers x16-x31 do not participate in the calling convention,
+so there are only six argument registers, a0-a5,
+only two callee-saved registers, cs0-cs1,
+and only three temporaries, t0-t2.
+
+If used with an ISA that has any of the registers x16-x31 and f0-f31,
+then these registers are considered temporaries.
+
+The IL32PC64E calling convention is not compatible with ISAs that have registers that require load and store alignments of more than 64 bits.
+In particular, this calling convention must not be used with the D or Q ISA extensions.
+
 === RV64ILP32* Calling Convention
 
 IMPORTANT: RV64ILP32* ABIs are experimental.
@@ -781,6 +799,10 @@ IL32PC64F:: IL32PC64 with hardware floating-point calling convention for FLEN=32
 [[abi-il32pc64d]]
 IL32PC64D:: IL32PC64 with hardware floating-point calling convention for FLEN=64
 (i.e. ELFCLASS32, <<EF_RISCV_CHERIABI,EF_RISCV_CHERIABI>> and <<EF_RISCV_FLOAT_ABI_DOUBLE,EF_RISCV_FLOAT_ABI_DOUBLE>>).
+
+[[abi-il32pc64e]]
+IL32PC64E:: <<IL32PC64E Calling Convention,IL32PC64E calling-convention>> only, hardware floating-point calling convention is not used
+(i.e. ELFCLASS32, <<EF_RISCV_CHERIABI,EF_RISCV_CHERIABI>>, <<EF_RISCV_FLOAT_ABI_SOFT,EF_RISCV_FLOAT_ABI_SOFT>>, and <<EF_RISCV_RVE,EF_RISCV_RVE>>).
 
 [[abi-l64pc128]]
 L64PC128:: Integer and capability calling convention only, hardware floating-point calling convention is not used
