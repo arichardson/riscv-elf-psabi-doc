@@ -56,6 +56,9 @@ After the prologue, the frame pointer register will point to the Canonical
 Frame Address or CFA, which is the stack pointer value on entry to the current
 procedure. The previous frame pointer and return address pair will reside just
 prior to the current stack address held in `fp`. This puts the return address
+// NOTE: Using sizeof(void *) instead of XLEN/8 here is an ABI change for
+// RV64ILP32 since fp is now 4 instead of 8 byte aligned. If this is a problem,
+// rather than a bugfix, then we can use max(XLEN/8,sizeof(void *)) instead.
 at `fp - sizeof(void *)`, and the previous frame pointer at `fp - 2 * sizeof(void *)`.
 
 It is left to the platform to determine the level of conformance with this
