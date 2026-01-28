@@ -697,6 +697,15 @@ Any integer operation (e.g., add/multiply/etc.) writing to the ``x0`-`x31` regis
 The pure-capability ABIs follow the same calling conventions as the base integer and hardware floating-point calling conventions, with the distinction that pointers are replaced by capabilities.
 This means that arguments and return values are passed in the same manner, but any pointer types are instead treated as capabilities.
 
+==== Variadic and On-Stack Arguments
+
+In the pure-capability ABIs, variadic and on-stack arguments are handled differently from the base integer calling convention to ensure capability safety and allow for bounded `va_list` implementations.
+
+1. All variadic arguments (those corresponding to the `...` in the function prototype) are passed on the stack. They never occupy argument registers `a0`-`a7`.
+2. A capability that covers all on-stack arguments on the stack is passed in the `x5` (`t0`) register.
+3. This capability has its Write and Execute permissions cleared.
+4. If no on-stack arguments are passed to a variadic function, the `x5` register is set to null.
+
 === IL32PC64E Calling Convention
 
 // TODO: confirm final naming of Y+E base ISA with ARC
@@ -1099,6 +1108,18 @@ of the given type in memory. If the type is passed by reference, the size and
 alignment used will be those of a pointer, and the fetched pointer will be used
 as the address of the actual argument. The `va_copy` macro is a single pointer
 copy and the `va_end` macro performs no operation.
+
+==== va_list, va_start, and va_arg in pure-capability ABIs
+NOTE: In the pure-capability ABIs, the handling of variadic arguments is different.
+All variadic arguments are passed on the stack, and a capability to them is passed in the `x5` (`t0`) register.
+See <<cheri-cc>> for details.
+
+As in other ABIs, the `va_list` type is represented as `void *` (which is a capability now).
+The `va_start` macro initializes the `va_list` using the capability provided in `x5`.
+Since all variadic arguments are on the stack, the callee does not need to construct a varargs save area for registers.
+Since the `va_list` now includes bounds information, attempting to use a non-existant argument via `va_arg` will result in a trap.
+
+
 
 === Vector Type Sizes and Alignments
 
