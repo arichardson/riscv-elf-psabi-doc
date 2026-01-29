@@ -356,8 +356,8 @@ below.
 NOTE: RV64ILP32* ABIs are experimental.
 
 // NOTE: Previously used the custom value 0x00010000
-[[EF_RISCV_CHERIABI]]
-EF_RISCV_CHERIABI (0x00000040)::: This bit is set when the binary targets the
+[[EF_RISCV_RVY]]
+EF_RISCV_RVY (0x00000040)::: This bit is set when the binary targets the
 pure capability ABIs defined by this specification.
 
 
