@@ -725,7 +725,7 @@ If used with an ISA that has any of the registers x16-x31 and f0-f31,
 then these registers are considered temporaries.
 
 The IL32PC64E calling convention is not compatible with ISAs that have registers that require load and store alignments of more than 64 bits.
-In particular, this calling convention must not be used with the D or Q ISA extensions.
+In particular, this calling convention must not be used with the Q ISA extensions.
 
 === RV64ILP32* Calling Convention
 
