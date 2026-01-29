@@ -868,8 +868,7 @@ default ABIs for specific architectures:
 on RV32G:: <<abi-ilp32d,ILP32D>>
 on RV64G:: <<abi-lp64d,LP64D>>
 
-For the same reasons, but to make full use of the additional
-protections made available by CHERI, we recommend that the default ABIs on
+For the same reasons, we recommend that the default ABIs on
 RVY be <<abi-l64pc128d,L64PC128D>> and <<abi-il32pc64d,IL32PC64D>>.
 
 NOTE: Although RV64GQ systems can technically use <<abi-lp64q,LP64Q>>, it is
