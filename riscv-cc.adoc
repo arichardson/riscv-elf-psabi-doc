@@ -946,10 +946,9 @@ alignments (based on the LP64 convention):
 
 L64PC128* and IL32PC64* ABIs::
 The pure-capability RVY ABIs use YLEN bits to represent all pointers and introduce two new base C types to hold capabilities:
-the C standard library on CHERI-RISC-V defines `intcap_t`/`uintcap_t` types that can hold capabilities (YLEN values) and integers (XLEN values) alike.
+the C standard library on CHERI-RISC-V defines `intptr_t`/`uintptr_t` types that can hold capabilities (YLEN values) and integers (XLEN values) alike.
 These types have a YLEN-bit storage size (either 64-bit or 128-bit), however, the maximum arithmetic value that such a type can hold is limited to the maximum _address_ a capability can take (XLEN bits, i.e. YLEN/2).
-As `intptr_t`/`uintptr_t` must hold pointers and integers, they mapped to `intcap_t`/`uintcap_t` in the pure-capability ABIs.
-All these types must be aligned to YLEN bits.
+Pointers and `intptr_t`/`uintptr_t` must be aligned to YLEN bits.
 +
 All other types are otherwise identical to their LP64*/ILP32* counterparts.
 +
