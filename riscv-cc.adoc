@@ -694,11 +694,24 @@ IMPORTANT: RVY Pure-Capability ABIs are experimental.
 These calling conventions are used when the Y extension is present and a pure-capability ABI is in use.
 In these ABIs, all pointers (including the stack pointer, frame pointer, and return address) are represented as capabilities (using the extended GPRs).
 
-The register names and usage remain the same as the integer calling convention, but the registers `x0`-`x31` (and their ABI aliases) now refer to the `YLEN`-wide extended GPRs.
+The register names and usage remain the same as the <<integer-cc,integer calling convention>>, but the registers `x0`-`x31` (and their ABI aliases) now refer to the `YLEN`-wide extended GPRs.
 Any integer operation (e.g., add/multiply/etc.) writing to the `x1`-`x31` registers sets the lower XLEN bits and zeroes the upper ones.
 
-The pure-capability ABIs follow the same calling conventions as the base integer and hardware floating-point calling conventions, with the distinction that pointers are replaced by capabilities.
-This means that arguments and return values are passed in the same manner, but any pointer types are instead treated as capabilities.
+The pure-capability ABIs closely follow the same calling conventions as the base integer and hardware floating-point calling conventions, but since the GPRs are now `YLEN` bits wide the following differences exist:
+
+* Variadic and on-stack arguments use a different register convention (see next subsection).
+* `2*XLEN` (i.e. `YLEN`) wide scalars are passed in a single argument register if then are of pointer type (including `(u)intptr_t`).
++
+NOTE: For non-pointer scalar types the maximum size that is passed in a single argument register is still `XLEN` rather than `YLEN`, as the high bits of capability registers cannot be used for computation directly and need to be copied to another register using `YHIR` first.
+// FIXME: maybe we should just pass int128 in a single reg? Are those ever so perf-critical that the one extra YHIR/YHIW hurts?
+A future calling convention variant may allow for packing these types in a single register.
+
+// FIXME: should we simplify this and just always pass aggregates up to 2*YLEN in packed registers?
+* For aggregates > `2*XLEN` but <= `2*YLEN`, pairs of registers can be used in the following cases:
+** The aggregate consists of two capability types
+** The aggregate consists of one capability type and another type that fits into `XLEN` bits (e.g. a pointer and a `long`).
+// FIXME: is the next statement true or do we do the same splitting?
+* For aggregates that can be passed in pairs of registers, they are never split into one register part and one on-stack part, but instead the entire aggregate is passed on the stack.
 
 ==== Variadic and On-Stack Arguments
 
