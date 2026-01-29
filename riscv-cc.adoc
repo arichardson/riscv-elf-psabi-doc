@@ -731,7 +731,7 @@ except for the following differences.
 The stack pointer need only be aligned to a 64-bit boundary.
 Registers x16-x31 do not participate in the calling convention,
 so there are only six argument registers, a0-a5,
-only two callee-saved registers, cs0-cs1,
+only two callee-saved registers, s0-s1,
 and only three temporaries, t0-t2.
 
 If used with an ISA that has any of the registers x16-x31 and f0-f31,
