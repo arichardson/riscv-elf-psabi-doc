@@ -991,7 +991,6 @@ alignment (based on the IL32PC64 convention):
 |===
 | Type                   | Size (Bytes)    | Alignment (Bytes)
 | void *                 | 8               | 8
-| `intcap_t`/`uintcap_t` | 8               | 8
 | `intptr_t`/`uintptr_t` | 8               | 8
 | All other types        | See ILP32* ABIs | See LP64* ABIs
 |===
