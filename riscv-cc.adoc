@@ -1132,7 +1132,6 @@ Since all variadic arguments are on the stack, the callee does not need to const
 Since the `va_list` now includes bounds information, attempting to use a non-existant argument via `va_arg` will result in a trap.
 
 
-
 === Vector Type Sizes and Alignments
 
 This section defines the sizes and alignments for the vector types defined in
