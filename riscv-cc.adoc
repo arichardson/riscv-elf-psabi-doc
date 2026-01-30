@@ -978,7 +978,6 @@ alignment (based on the L64 convention):
 |===
 | Type                   | Size (Bytes)   | Alignment (Bytes)
 | void *                 | 16             | 16
-| `intcap_t`/`uintcap_t` | 16             | 16
 | `intptr_t`/`uintptr_t` | 16             | 16
 | All other types        | See LP64* ABIs | See LP64* ABIs
 |===
