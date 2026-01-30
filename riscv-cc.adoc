@@ -700,7 +700,7 @@ Any integer operation (e.g., add/multiply/etc.) writing to the `x1`-`x31` regist
 The pure-capability ABIs closely follow the same calling conventions as the base integer and hardware floating-point calling conventions, but since the GPRs are now `YLEN` bits wide the following differences exist:
 
 * Variadic and on-stack arguments use a different register convention (see next subsection).
-* `2*XLEN` (i.e. `YLEN`) wide scalars are passed in a single argument register if then are of pointer type (including `(u)intptr_t`).
+* `2*XLEN` (i.e. `YLEN`) wide scalars are passed in a single argument register if they are of pointer type (including `(u)intptr_t`).
 +
 NOTE: For non-pointer scalar types the maximum size that is passed in a single argument register is still `XLEN` rather than `YLEN`, as the high bits of capability registers cannot be used for computation directly and need to be copied to another register using `YHIR` first.
 // FIXME: maybe we should just pass int128 in a single reg? Are those ever so perf-critical that the one extra YHIR/YHIW hurts?
