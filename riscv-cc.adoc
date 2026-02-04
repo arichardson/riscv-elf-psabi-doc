@@ -695,7 +695,7 @@ These calling conventions are used when the Y extension is present and a pure-ca
 In these ABIs, all pointers (including the stack pointer, frame pointer, and return address) are represented as capabilities (using the extended GPRs).
 
 The register names and usage remain the same as the <<integer-cc,integer calling convention>>, but the registers `x0`-`x31` (and their ABI aliases) now refer to the `YLEN`-wide extended GPRs.
-Any integer operation (e.g., add/multiply/etc.) writing to the `x1`-`x31` registers sets the lower XLEN bits and zeroes the upper ones.
+Any integer operation (e.g., add/multiply/etc.) writing to the `x1`-`x31` registers sets the address bits and clears the metadata.
 
 The pure-capability ABIs closely follow the same calling conventions as the base integer and hardware floating-point calling conventions, but since the GPRs are now `YLEN` bits wide the following differences exist:
 
