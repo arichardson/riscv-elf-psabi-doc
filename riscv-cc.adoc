@@ -44,22 +44,20 @@ The presence of a frame pointer is optional.  If a frame pointer exists,
 it must reside in x8 (s0); the register remains callee-saved.
 
 Code that uses a frame pointer will construct a linked list of stack frames,
-where each frame links to its caller using a "frame record". A frame record
-consists of two XLEN values on the stack; the return address and the link to
-the next frame record. The frame pointer register will point to the innermost
-frame, thereby starting the linked list. By convention, the lowest XLEN value
-shall point to the previous frame, while the next XLEN value shall be the
-return address. The end of the frame record chain is indicated by the address
-zero appearing as the next link in the chain.
+where each frame links to its caller using a "frame record".
+A frame record consists of two pointer-sized values on the stack; the return address and the link to the next frame record.
+The frame pointer register will point to the innermost frame, thereby starting the linked list.
+By convention, the lowest pointer value shall point to the previous frame, while the next pointer value shall be the return address.
+The end of the frame record chain is indicated by a `NULL` pointer appearing as the next link in the chain.
 
 After the prologue, the frame pointer register will point to the Canonical
 Frame Address or CFA, which is the stack pointer value on entry to the current
 procedure. The previous frame pointer and return address pair will reside just
-prior to the current stack address held in `fp`. This puts the return address
+prior to the current stack address held in `fp`.
 // NOTE: Using sizeof(void *) instead of XLEN/8 here is an ABI change for
 // RV64ILP32 since fp is now 4 instead of 8 byte aligned. If this is a problem,
 // rather than a bugfix, then we can use max(XLEN/8,sizeof(void *)) instead.
-at `fp - sizeof(void *)`, and the previous frame pointer at `fp - 2 * sizeof(void *)`.
+This puts the return address at `fp - sizeof(void *)`, and the previous frame pointer at `fp - 2 * sizeof(void *)`.
 
 It is left to the platform to determine the level of conformance with this
 convention. A platform may choose:
