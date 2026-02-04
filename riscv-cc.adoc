@@ -719,7 +719,17 @@ A future calling convention variant may allow for packing these types in a singl
 
 In the pure-capability ABIs, variadic and on-stack arguments are handled differently from the base integer calling convention to ensure capability safety and allow for bounded `va_list` implementations.
 
-1. All variadic arguments (those corresponding to the `...` in the function prototype) are passed on the stack. They never occupy argument registers `a0`-`a7`.
+1. All variadic arguments (those corresponding to the `...` in the function prototype) are passed on the stack.
+They never occupy argument registers `a0`-`a7`.
+Each variadic argument is passed in a `YLEN`-sized stack slot.
++
+NOTE: Passing all variadic arguments on the stack simplifies the implementation of `va_list` and ensures capability safety.
+Measurements on other architectures (AArch64) have shown that most variadic functions are simply wrappers around a function taking a `va_list`.
+In standard ABIs that pass variadic arguments in registers, the callee must spill these registers to the stack to create a contiguous `va_list` structure, which adds overhead and complicates the implementation.
+Passing all variadic arguments on the stack from the start simplifies these wrappers and avoids complex register-to-stack spilling logic.
+Using `YLEN`-sized slots for all arguments, including those smaller than `YLEN`, further avoids the need for complex logic to determine the offset of each argument.
+This approach has been used successfully in other CHERI-enabled architectures such as Morello and was also adopted by Apple in the variadic calling convention for AArch64 on iOS and macOS.
+
 2. A capability that covers all on-stack arguments on the stack is passed in the `x5` (`t0`) register.
 3. This capability has its Write and Execute permissions cleared.
 4. If no on-stack arguments are passed to a variadic function, the `x5` register is set to null.
