@@ -731,7 +731,7 @@ Using `YLEN`-sized slots for all arguments, including those smaller than `YLEN`,
 This approach has been used successfully in other CHERI-enabled architectures such as Morello and was also adopted by Apple in the variadic calling convention for AArch64 on iOS and macOS.
 
 2. A capability that covers all on-stack arguments on the stack is passed in the `x5` (`t0`) register.
-3. This capability has its Write and Execute permissions cleared.
+3. For variadic functions, this capability has its `Store` and `Execute` permissions cleared.
 4. If no on-stack arguments are passed to a variadic function, the `x5` register is set to null.
 
 === IL32PC64E Calling Convention
