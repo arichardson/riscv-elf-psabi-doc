@@ -712,6 +712,16 @@ A future calling convention variant may allow for packing these types in a singl
 * For aggregates > `2*XLEN` but <= `2*YLEN`, pairs of registers can be used in the following cases:
 ** The aggregate consists of two capability types
 ** The aggregate consists of one capability type and another type that fits into `XLEN` bits (e.g. a pointer and a `long`).
+* A union is passed in a single register if all of its possible members can be passed in a single `YLEN` register.
+Otherwise, the union is passed on the stack.
++
+NOTE: This allows types such as `union { void* a; long b; }` to be passed in registers.
+However, it avoids the complexity of larger aggregates where members might have conflicting register and memory layouts.
+For example, in `union { struct { void* a1; long a2; } a; struct { long b1; long b2; } b; }`, the second member would normally be passed in two registers according to base aggregate rules.
+Passing such a union in registers would require packing multiple members into a single `YLEN` register to ensure spilling to memory retains the correct layout, which is difficult to implement.
++
+// TODO: In theory we could allow this for unions that require two registers if the in-register and in-memory layout matches for all possible union members.
+
 // FIXME: is the next statement true or do we do the same splitting?
 * For aggregates that can be passed in pairs of registers, they are never split into one register part and one on-stack part, but instead the entire aggregate is passed on the stack.
 
