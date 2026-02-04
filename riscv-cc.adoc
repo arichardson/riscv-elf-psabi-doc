@@ -740,7 +740,10 @@ This approach has been used successfully in other CHERI-enabled architectures su
 The IL32PC64E calling convention is designed to be usable with the RV32YE base ISA.
 This calling convention is the same as the IL32PC64 calling convention,
 except for the following differences.
-The stack pointer need only be aligned to a 64-bit boundary.
+The stack pointer must be aligned to a 128-bit boundary.
++
+NOTE: Maintaining 16-byte alignment even for RV32-based ABIs has benefits for bulk zeroing and capability representability.
+
 Registers x16-x31 do not participate in the calling convention,
 so there are only six argument registers, a0-a5,
 only two callee-saved registers, s0-s1,
@@ -748,9 +751,6 @@ and only three temporaries, t0-t2.
 
 If used with an ISA that has any of the registers x16-x31 and f0-f31,
 then these registers are considered temporaries.
-
-The IL32PC64E calling convention is not compatible with ISAs that have registers that require load and store alignments of more than 64 bits.
-In particular, this calling convention must not be used with the Q ISA extensions.
 
 === RV64ILP32* Calling Convention
 
