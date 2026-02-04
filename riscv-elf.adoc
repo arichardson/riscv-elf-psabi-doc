@@ -1219,6 +1219,9 @@ The defined processor-specific segment types are listed in <<rv-seg-type>>.
 | PT_RISCV_ATTRIBUTES  | 0x70000003  | RISC-V ELF attribute section.
 |===
 
+For pure-capability ABIs, additional processor-specific segment types are
+defined by the <<cheri-gelf-abi,CHERI Generic ELF ABI>>.
+
 `PT_RISCV_ATTRIBUTES` describes the location of RISC-V ELF attribute section.
 
 WARNING: `PT_RISCV_ATTRIBUTES` is deprecated. The build attributes section does
@@ -1227,7 +1230,10 @@ described by `PT_RISCV_ATTRIBUTES` is present.
 
 === Note Sections
 
-There are no RISC-V specific definitions relating to ELF note sections.
+For pure-capability ABIs, additional processor-specific note sections are defined
+by the <<cheri-gelf-abi,CHERI Generic ELF ABI>>.
+Otherwise, there are no RISC-V specific definitions relating to ELF note
+sections.
 
 === Dynamic Section
 
@@ -1242,6 +1248,9 @@ The defined processor-specific dynamic array tags are listed in <<rv-dyn-tag>>.
 
 | DT_RISCV_VARIANT_CC | 0x70000001 | d_val | Platform specific | Platform specific
 |===
+
+For pure-capability ABIs, additional processor-specific dynamic array tags
+are defined by the <<cheri-gelf-abi,CHERI Generic ELF ABI>>.
 
 An object must have the dynamic tag `DT_RISCV_VARIANT_CC` if it has one or more
 `R_RISCV_JUMP_SLOT` relocations against symbols with the `STO_RISCV_VARIANT_CC`
@@ -2144,3 +2153,6 @@ https://github.com/riscv/riscv-code-size-reduction
 
 * [[[rv-toolchain-conventions]]] "RISC-V Toolchain Conventions"
 https://github.com/riscv-non-isa/riscv-toolchain-conventions
+
+* [[[cheri-gelf-abi]]] "CHERI Generic ELF ABI"
+https://github.com/CTSRD-CHERI/cheri-elf-gabi/blob/main/gabi.md
