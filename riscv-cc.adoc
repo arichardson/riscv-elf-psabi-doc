@@ -702,7 +702,9 @@ The pure-capability ABIs closely follow the same calling conventions as the base
 * Variadic and on-stack arguments use a different register convention (see next subsection).
 * `2*XLEN` (i.e. `YLEN`) wide scalars are passed in a single argument register if they are of pointer type (including `(u)intptr_t`).
 +
-NOTE: For non-pointer scalar types the maximum size that is passed in a single argument register is still `XLEN` rather than `YLEN`, as the high bits of capability registers cannot be used for computation directly and need to be copied to another register using `YHIR` first.
+NOTE: For non-pointer scalar types the maximum size that is passed in a single argument register is still `XLEN` rather than `YLEN`.
+This avoids the implementation difficulty of passing `i64` in a single register when `YLEN==64` (RV32).
+It also reflects that the high bits of capability registers cannot be used for computation directly as they need to be copied to another register using `YHIR` first.
 // FIXME: maybe we should just pass int128 in a single reg? Are those ever so perf-critical that the one extra YHIR/YHIW hurts?
 A future calling convention variant may allow for packing these types in a single register.
 
