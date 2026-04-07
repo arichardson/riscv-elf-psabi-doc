@@ -592,7 +592,11 @@ Description:: Additional information about the relocation
                                             <| S - P
 .2+| 65      .2+| TLSDESC_CALL      .2+| Static  |                   .2+| Annotate call to TLS descriptor resolver function, `%tlsdesc_call(address of %tlsdesc_hi)`, for relaxation purposes only
                                             <|
-.2+| 66-190  .2+| *Reserved*                          .2+| -       |                   .2+| Reserved for future standard use
+.2+| 66      .2+| *Reserved*                          .2+| -       |                   .2+| Reserved for future standard use
+                                            <|
+.2+| 67-76   .2+| *Reserved*                          .2+| -       |                   .2+| Reserved for Y base ISA
+                                            <|
+.2+| 77-190  .2+| *Reserved*                          .2+| -       |                   .2+| Reserved for future standard use
                                             <|
 .2+| 191     .2+| VENDOR        .2+| Static  |                   .2+| Paired with a vendor-specific relocation and must be placed immediately before it, indicates which vendor owns the relocation.
                                             <|
@@ -617,7 +621,9 @@ Nonstandard extensions are free to use relocation numbers 192-255 for any
 purpose. These vendor-specific relocations must be preceded by a
 `R_RISCV_VENDOR` relocation against a vendor identifier symbol. The preceding
 `R_RISCV_VENDOR` relocation is used by the linker to choose the correct
-implementation for the associated nonstandard relocation.
+implementation for the associated nonstandard relocation. This scheme only
+specifies how to encode static nonstandard relocations; a future version of this
+specification may extend the scheme to support dynamic nonstandard relocations.
 
 The vendor identifier symbol should be a defined symbol and should set the type
 to `STT_NOTYPE`, binding to `STB_LOCAL`, and the size of symbol to zero.
