@@ -701,28 +701,20 @@ The pure-capability ABIs closely follow the same calling conventions as the base
 * `2*XLEN` (i.e. `YLEN`) wide scalars are passed in a single argument register if they are of pointer type (including `(u)intptr_t`).
 +
 NOTE: For non-pointer scalar types the maximum size that is passed in a single argument register is still `XLEN` rather than `YLEN`.
-This avoids the implementation difficulty of passing `i64` in a single register when `YLEN==64` (RV32).
-It also reflects that the high bits of capability registers cannot be used for computation directly as they need to be copied to another register using `YHIR` first.
-// FIXME: maybe we should just pass int128 in a single reg? Are those ever so perf-critical that the one extra YHIR/YHIW hurts?
-A future calling convention variant may allow for packing these types in a single register.
+This avoids the implementation difficulty of passing `int64_t` in a single register when `YLEN` is 64 (RV32).
+// It also reflects that the high bits of capability registers cannot be used for computation directly as they need to be copied to another register using `YHIR` first.
+// A future calling convention variant may allow for packing these types in a single register.
 
-// FIXME: should we simplify this and just always pass aggregates up to 2*YLEN in packed registers?
-* For aggregates > `2*XLEN` but <= `2*YLEN`, pairs of registers can be used in the following cases:
-** The aggregate consists of two capability types
-** The aggregate consists of one capability type and another type that fits into `XLEN` bits (e.g. a pointer and a `long`), in either order.
-* `YLEN`-wide aggregates (as opposed to scalars) are passed in a single `YLEN` argument register if they contain at least one pointer type.
-// FIXME: is the next statement true or do we do the same splitting?
-* For aggregates that can be passed in pairs of registers, they are never split into one register part and one on-stack part, but instead the entire aggregate is passed on the stack.
-* Aggregates larger than `2*YLEN` or with an alignment larger than the stack alignment are passed by reference.
-* A union is passed in a single register if all of its possible members can be passed in a single `YLEN` register.
-Otherwise, the union is passed on the stack.
+* Aggregates (as opposed to scalars) up to `2*YLEN` bits are passed in `YLEN` argument register(s) if they are at least `YLEN`-bit aligned using the memory layout of the aggregate.
 +
-NOTE: This allows types such as `union { void* a; long b; }` to be passed in registers.
-However, it avoids the complexity of larger aggregates where members might have conflicting register and memory layouts.
-For example, in `union { struct { void* a1; long a2; } a; struct { long b1; long b2; } b; }`, the second member would normally be passed in two registers according to base aggregate rules.
-Passing such a union in registers would require packing multiple members into a single `YLEN` register to ensure spilling to memory retains the correct layout, which is difficult to implement.
-+
-// TODO: In theory we could allow this for unions that require two registers if the in-register and in-memory layout matches for all possible union members.
+NOTE: This rule is required to ensure that aggregates that could potentially be used to store capabilities, but do not declare capability members (such as `alignas(16) char bytes[16]`) are passed in capability registers instead of being split into two registers (which would invalidate the capability tag).
+// This does mean that `int64_t` and `struct { int64_t }` have different calling conventions but this behaviour matches the base integer calling convention.
+
+* For aggregates that can be passed in pairs of registers, they are never split into one register part and one on-stack part.
+  Instead of splitting the entire aggregate is passed on the stack.
+* Aggregates larger than `2*YLEN` or with an alignment larger than the stack alignment are always passed by reference.
+* All other aggregates follow the base calling convention.
+* Unions follow the same rules as aggregates: if it is `YLEN`-bit aligned and less than or equal to `2*YLEN`-bits in size, it is passed in memory layout in `YLEN` registers. Otherwise, the base calling convention rules apply.
 
 ==== Variadic and On-Stack Arguments
 
