@@ -58,6 +58,14 @@ This specification uses the following terms and abbreviations:
 | RV64ILP32F        | Draft
 | RV64ILP32D        | Draft
 | RV64ILP32Q        | Draft
+| IL32PC64          | Draft
+| IL32PC64F         | Draft
+| IL32PC64D         | Draft
+| IL32PC64E         | Draft
+| L64PC128          | Draft
+| L64PC128F         | Draft
+| L64PC128D         | Draft
+| L64PC128Q         | Draft
 |===
 
 NOTE: ABI for big-endian is *NOT* included in this specification, we intend to
